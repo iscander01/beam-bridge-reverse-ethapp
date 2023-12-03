@@ -16,7 +16,7 @@ import delay from '@redux-saga/delay-p';
 
 const metaMaskController = MetaMaskController.getInstance();
 
-const GOERLI_CHAIN_ID = '5';
+const CHAIN_ID = '1';
 
 function initApp(account: string) {
   store.dispatch(setAccountState(account));
@@ -93,7 +93,7 @@ function* sharedSaga() {
             }
             yield put(navigate(ROUTES.MAIN.CONNECT));
           } else {
-            store.dispatch(setIsCorrectNetwork(window.ethereum.networkVersion === GOERLI_CHAIN_ID));
+            store.dispatch(setIsCorrectNetwork(window.ethereum.networkVersion == CHAIN_ID));
             initApp(payload.data[0]);
             yield fork(handleTransactions, payload.data[0], true);
           }

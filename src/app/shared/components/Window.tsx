@@ -62,7 +62,7 @@ const Window: React.FC<WindowProps> = ({
   return (
     <Container ref={rootRef}>
       { systemState.isCorrectNetwork === false && 
-        <div className='wrong-network'> Wrong network! Change network to Goerli.</div>}
+        <div className='wrong-network'> Wrong network! Change network to Mainnet.</div>}
       { state !== "content" ?
       <>  
         {

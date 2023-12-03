@@ -154,7 +154,7 @@ const MainPage: React.FC = () => {
       name: 'hash',
       title: 'Hash',
       fn: (value: string, tr: any) => {
-        return (<HashLink href={'https://goerli.etherscan.io/tx/' + tr.hash} target='_blank'>
+        return (<HashLink href={'https://etherscan.io/tx/' + tr.hash} target='_blank'>
           {formatActiveAddressString(tr.hash)
         }</HashLink>)
       }
