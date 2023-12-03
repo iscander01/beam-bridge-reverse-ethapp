@@ -54,7 +54,7 @@ const Connect: React.FC = () => {
         <Container>
           <Title>ETH to BEAM Bridge</Title>
           <Subtitle>
-            Transfer ETH, BTC, DAI and USDT.<br/>
+            Transfer ETH and BEAM.<br/>
             More tokens coming soon!
           </Subtitle>
           <Button icon={IconMetamask}
