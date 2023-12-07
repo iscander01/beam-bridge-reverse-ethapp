@@ -70,7 +70,7 @@ const Window: React.FC<WindowProps> = ({
           <ActiveAccount text={systemState.account} onClick={()=>{setPopupVisible()}}></ActiveAccount> :
           <></>
         }
-        <Title>Ethereum to Beam Bridge</Title>
+        <Title>WBEAM (Ethereum) ={'>'} BEAM Bridge</Title>
         { children }
         <AccountPopup visible={popupsState.account} onCancel={()=>{
           dispatch(setPopupState({type: 'account', state: false}));

@@ -123,7 +123,7 @@ const Receive = () => {
         </BackControl>
       </ControlStyled>
       <FormStyled>
-        <FormTitle>Beam to Ethereum</FormTitle>
+        <FormTitle>BEAM ={'>'} WBEAM (Ethereum)</FormTitle>
         <AddressTitle>Your Ethereum Bridge address:</AddressTitle>
         <Address>{systemState.account}</Address>
         <ReceiveStyled>

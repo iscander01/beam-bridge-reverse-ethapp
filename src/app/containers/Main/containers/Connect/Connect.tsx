@@ -52,7 +52,7 @@ const Connect: React.FC = () => {
     <>
       <Window state="content">
         <Container>
-          <Title>ETH to BEAM Bridge</Title>
+          <Title>WBEAM (Ethereum) ={'>'} BEAM Bridge</Title>
           <Subtitle>
             Transfer ETH and BEAM.<br/>
             More tokens coming soon!

@@ -23,7 +23,7 @@ const BaseButtonStyled = styled.button<ButtonProps>`
 const ButtonStyled = styled(BaseButtonStyled)`
   display: block;
   width: 100%;
-  max-width: 254px;
+  max-width: 274px;
   margin: 0 auto;
   margin-bottom: 10px;
   padding: 10px 24px;

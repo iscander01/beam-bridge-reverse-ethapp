@@ -87,7 +87,7 @@ const Card: React.FC<CardProps> = ({
     <CardStyled is_approved={is_approved} icon={icon} curr_id={curr_id} rate_id={rate_id} type={type} {...rest}>
       { ICONS[icon]() }
       <BalanceStyled>
-        <BalanceValue>{balanceValue} {currency}</BalanceValue>
+        <BalanceValue>{balanceValue} {currency === 'BEAM' ? 'WBEAM' : currency}</BalanceValue>
         <BalanceRate>{`${rates ? balanceValue * rates[rate_id].usd : 0} USD`}</BalanceRate>
       </BalanceStyled>
       {!is_approved ? (

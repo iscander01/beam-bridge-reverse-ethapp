@@ -560,7 +560,7 @@ const Send = () => {
                   <span className='text'>max</span>
                 </span>
               </div>
-              <div className='balance'> {availableBalance.value} {selectedCurrency.name} </div>
+              <div className='balance'> {availableBalance.value} {selectedCurrency.name == "BEAM" ? "WBEAM" : selectedCurrency.name} </div>
               <div className='rate'>{availableBalance.rate} USD</div>
             </AvailableContainer>
             <div className='separator'/>
@@ -568,7 +568,7 @@ const Send = () => {
               <div className='fee-item'>
                 <FormSubtitle className={FeeSubtitleClass}>RELAYER FEE</FormSubtitle>
                 { relayerFeeVal && <>
-                  <div className='fee-value'>{relayerFeeVal.toFixed(12).replace(/\.?0+$/,"")} {selectedCurrency.name}</div>
+                  <div className='fee-value'>{relayerFeeVal.toFixed(12).replace(/\.?0+$/,"")} {selectedCurrency.name == "BEAM" ? "WBEAM" : selectedCurrency.name}</div>
                   <Rate value={parseFloat(relayerFeeVal)}
                     selectedCurrencyId={selectedCurrency.rate_id}
                     className={RateStyleClass} />
@@ -598,7 +598,7 @@ const Send = () => {
               <>
                 {ICONS[selectedCurrency.name.toLowerCase()]()}
                 <div className='approve-msg'>
-                  {`To send funds to BEAM please approve ${selectedCurrency.name} token first`}
+                  {`To send funds to BEAM please approve W${selectedCurrency.name} token first`}
                 </div>
                 <Button className={ApproveButtonClass}
                   disabled={isApproveInProgress}

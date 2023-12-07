@@ -177,14 +177,14 @@ const MainPage: React.FC = () => {
             disabled={isTrInProgress || systemState.isCorrectNetwork === false}
             pallete="purple"
             onClick={handleSendClick}>
-              ethereum to beam
+              WBEAM (Ethereum) ={'>'} BEAM
           </Button>
           <Button icon={IconReceive} 
             className={ReceiveButtonClass} 
             disabled={systemState.isCorrectNetwork === false}
             pallete="blue" 
             onClick={handleReceiveClick}>
-              beam to ethereum
+              BEAM ={'>'} WBEAM (Ethereum)
           </Button>
         </StyledControls>
         <Content>
