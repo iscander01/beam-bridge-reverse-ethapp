@@ -27,6 +27,15 @@ export const NETWORK_INDICATOR: {
   [`${arbitrum.id}`]: "arb",
 }
 
+export const NETWORK_EXPLORER: {
+  [network_id: string]: string 
+} = {
+  [`${mainnet.id}`]: "https://etherscan.io/tx/",
+  [`${sepolia.id}`]: "https://sepolia.etherscan.io/tx",
+  [`${arbitrumSepolia.id}`]: "https://sepolia.arbiscan.io/tx/",
+  [`${arbitrum.id}`]: "https://arbiscan.io/tx/",
+}
+
 export const CURRENCIES: CurrenciesByNetworkType = {
   [`${mainnet.id}`]: {
     [CURRENCY_IDS.BEAM]: {

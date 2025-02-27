@@ -4,32 +4,8 @@ import store from '@app/index';
 import { actions } from '.';
 import { GasPriceItem, GasPriceResponse, RatesApiResponse } from '../interfaces';
 
-
 const FETCH_INTERVAL = 5000;
 const API_URL = 'https://explorer-api.beam.mw/bridges';
-
-export function* loadParamsSaga(
-    action: ReturnType<typeof actions.loadAppParams.request>,
-  ) : Generator {
-    // const systemState = (yield select(selectSystemState())) as {account: string};
-    // const balances: Balance[] = [];
-    
-    // for(let curr of CURRENCIES) {
-    //   const balanceValue = (curr.id === ethId ? 
-    //     yield call(callLoadEthBalance, systemState.account) :
-    //     yield call(callLoadTokenBalance, curr, systemState.account)) as number;
-    //   const isAllowed = curr.id === ethId ? true : (yield call(callLoadAllowance, curr, systemState.account)) as boolean;
-      
-    //   balances.push({
-    //     curr_id: curr.id,
-    //     icon: curr.name.toLowerCase(),
-    //     rate_id: curr.rate_id,
-    //     value: balanceValue,
-    //     is_approved: isAllowed
-    //   });
-    // }
-    // yield put(actions.loadAppParams.success(balances));
-}
 
 async function loadRatesCached(): Promise<RatesApiResponse> {
   try {
@@ -81,7 +57,6 @@ export function* loadGasPricesSaga(action: ReturnType<typeof actions.loadGasPric
 
 
 function* mainSaga() {
-    yield takeLatest(actions.loadAppParams.request, loadParamsSaga);
     yield takeLatest(actions.loadRates.request, loadRatesSaga);
     yield takeLatest(actions.loadGasPrices.request, loadGasPricesSaga);
 }

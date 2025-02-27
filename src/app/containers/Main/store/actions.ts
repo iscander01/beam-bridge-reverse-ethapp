@@ -8,12 +8,6 @@ export const setIsApproveInProgress = createAction('@@MAIN/SET_IS_APPROVE_IN_PRO
 
 export const setPopupState = createAction('@@MAIN/SET_POPUP_STATE')<{type: string, state: boolean}>();
 
-export const loadAppParams = createAsyncAction(
-    '@@MAIN/LOAD_PARAMS',
-    '@@MAIN/LOAD_PARAMS_SUCCESS',
-    '@@MAIN/LOAD_PARAMS_FAILURE',
-)<any, any, any>();
-
 export const loadRates = createAsyncAction(
     '@@MAIN/GET_RATE',
     '@@MAIN/GET_RATE_SUCCESS',

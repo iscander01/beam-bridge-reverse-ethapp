@@ -3,17 +3,19 @@ import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Window, TokenCard } from '@app/shared/components';
+import { useDispatch, useSelector } from 'react-redux';
+import { Window, TokenCard, Table } from '@app/shared/components';
 import { selectIsTrInProgress } from '../../store/selectors';
 import { IconSend, IconReceive, IconEth, IconBeam } from '@app/shared/icons';
-import { CURRENCIES, ROUTES } from '@app/shared/constants';
+import { CURRENCIES, CURRENCY_IDS, NETWORK_EXPLORER, ROUTES } from '@app/shared/constants';
 import { selectTransactions } from '@app/shared/store/selectors';
 import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { formatActiveAddressString } from '@core/appUtils';
 import { Button, Text } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { useTokenBalanceAndAllowance } from '@app/shared/hooks';
+import { loadTransactions } from '@app/shared/store/actions';
+import { Transaction } from '@app/shared/interface';
 
 const Content = styled.div`
   width: 600px;
@@ -86,7 +88,8 @@ const MainPage: React.FC = () => {
   const navigate = useNavigate();
   const bridgeTransactions = useSelector(selectTransactions());
   const isTrInProgress = useSelector(selectIsTrInProgress());
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<Transaction[]>([]);
+  const dispatch = useDispatch();
   const { address, chain: activeChain } = useAccount();
 
   const { tokenBalance, ethBalance, allowance } = useTokenBalanceAndAllowance({
@@ -95,14 +98,23 @@ const MainPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // if (bridgeTransactions.length > 0) {
-    //   const data = bridgeTransactions.map((tr) => {
-    //     const item = { ...tr };
-    //     item['isIncome'] = systemState.account === tr.to;
-    //     return item;
-    //   });
-    //   setTableData(data);
-    // }
+    if (address && activeChain) {
+      dispatch(loadTransactions.request({
+        address,
+        chain: activeChain.id
+      }));
+    }
+  }, [address, activeChain]);
+
+  useEffect(() => {
+    if (bridgeTransactions.length > 0) {
+      const data = bridgeTransactions.map((tr) => {
+        const item = { ...tr };
+        item['isIncome'] = address === tr.to;
+        return item;
+      });
+      setTableData(data);
+    }
   }, [bridgeTransactions]);
 
   const getDate = (timestamp: number) => {
@@ -119,12 +131,10 @@ const MainPage: React.FC = () => {
       name: 'value',
       title: 'Amount',
       fn: (value: string, tr: any) => {
-        const curr = CURRENCIES.find((item) => { 
-          return item.ethTokenContract.toLowerCase() === tr.contractAddress.toLowerCase()
-        });
-        if (curr) {
-          const amount = ((parseInt(tr.value) / Math.pow(10, curr.decimals)).toFixed(curr.validator_dec)).replace(/\.?0+$/,"");
-        return `${amount} ${curr.name}`;
+        if (activeChain) {
+          const currency = CURRENCIES[activeChain.id][CURRENCY_IDS.BEAM];
+          const amount = ((parseInt(tr.value) / Math.pow(10, currency.decimals)).toFixed(currency.validator_dec)).replace(/\.?0+$/,"");
+          return `${amount} ${currency.name}`;
         }
       }
     },
@@ -159,7 +169,7 @@ const MainPage: React.FC = () => {
       name: 'hash',
       title: 'Hash',
       fn: (value: string, tr: any) => {
-        return (<HashLink href={'https://etherscan.io/tx/' + tr.hash} target='_blank'>
+        return (activeChain && <HashLink href={NETWORK_EXPLORER[activeChain.id] + tr.hash} target='_blank'>
           {formatActiveAddressString(tr.hash)
         }</HashLink>)
       }
@@ -223,10 +233,10 @@ const MainPage: React.FC = () => {
             decimals={tokenBalance?.decimals}
           />
         </Content>
-        {/* <StyledTable>
+        <StyledTable>
           <Table config={TABLE_CONFIG} data={tableData} keyBy='transactionIndex'/>
           {tableData.length === 0 && <EmptyTableContent>There are no transactions yet</EmptyTableContent>}
-        </StyledTable> */}
+        </StyledTable>
       </Window>
     </>
   );

@@ -28,9 +28,6 @@ const reducer = createReducer<AppStateType, Action>(initialState)
   .handleAction(actions.setIsLocked, (state, action) => produce(state, (nexState) => {
     nexState.isLocked = action.payload;
   }))
-  .handleAction(actions.loadAppParams.success, (state, action) => produce(state, (nexState) => {
-    nexState.balance = action.payload;
-  }))
   .handleAction(actions.setPopupState, (state, action) => produce(state, (nexState) => {
     // nexState.popupsState[action.payload.type] = action.payload.state;
   }))
