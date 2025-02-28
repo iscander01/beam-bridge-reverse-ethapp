@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { styled } from '@linaria/react';
 import { Button, Input, Window, Rate } from '@app/shared/components';
 import { css } from '@linaria/core';
-import { estimateGas } from '@wagmi/core';
+import { call, estimateGas, getBytecode, readContract } from '@wagmi/core';
 import { config } from "@core/wagmiConfig";
 import EthERC20Pipe from '@app/eth-pipe/EthERC20Pipe.json';
 import { 
@@ -24,7 +24,7 @@ import { CURRENCIES, ETH_RATE_ID } from '@app/shared/constants';
 import { useFormik } from 'formik';
 import { Box, Divider, HStack, Text, VStack } from '@chakra-ui/react';
 import { useTokenBalanceAndAllowance } from '@app/shared/hooks';
-import { useAccount, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { Currency } from '@app/shared/interface/Common';
 import { parseNetwork, parseAddress, amountToBigInt } from "@core/appUtils";
 import { encodeFunctionData, erc20Abi, maxUint256 } from 'viem';
@@ -181,6 +181,7 @@ const Send = () => {
   const { switchChain } = useSwitchChain();
   const { writeContract, data: hash } = useWriteContract();
 
+
   const { tokenBalance, ethBalance, allowance, isLoading, error } = useTokenBalanceAndAllowance({
     address: address as `0x${string}`,
     activeChainId: activeChain?.id as number,
@@ -320,9 +321,9 @@ const Send = () => {
 
   const getEthFee = async (amount: number) => {
     if (selectedCurrency) {
-      let address = addressFromParams ? parsedAddressValue : values.address as string;
-      if (address.length > 66) {
-        address = address.slice(-66)
+      let addressBeam = addressFromParams ? parsedAddressValue : values.address as string;
+      if (addressBeam.length > 66) {
+        addressBeam = addressBeam.slice(-66)
       }
 
       const finalAmount = amountToBigInt(amount, selectedCurrency.decimals, selectedCurrency.validator_dec);
@@ -335,7 +336,7 @@ const Send = () => {
         args: [
           finalAmount,
           relayerFee,
-          address.slice(0, 2) !== '0x' ? ('0x' + address) : address,
+          addressBeam.slice(0, 2) !== '0x' ? ('0x' + addressBeam) : addressBeam,
         ],
       });
 
@@ -390,7 +391,7 @@ const Send = () => {
       address: selectedCurrency?.ethTokenContract as `0x${string}`,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [address as `0x${string}`, maxUint256],
+      args: [selectedCurrency?.ethPipeContract as `0x${string}`, maxUint256],
     });
   };
 
@@ -416,8 +417,10 @@ const Send = () => {
     const { networkIndicator, parsedAddress } = parseAddress(address);
     setParsedAddressValue(parsedAddress);
     const { networkId } = parseNetwork(networkIndicator);
-    setSelectedNetworkId(networkId);
-    setSelectedCurrency(CURRENCIES[networkId][CURRENCY_IDS.BEAM])
+    if (networkId) {
+      setSelectedNetworkId(networkId);
+      setSelectedCurrency(CURRENCIES[networkId][CURRENCY_IDS.BEAM]);
+    }
   }
 
   const handleAddMaxClick = () => {

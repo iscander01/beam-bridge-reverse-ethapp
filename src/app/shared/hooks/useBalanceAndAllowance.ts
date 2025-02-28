@@ -27,6 +27,7 @@ export const useTokenBalanceAndAllowance = ({
   activeChainId,
 }: UseTokenBalanceAndAllowanceProps): UseTokenBalanceAndAllowanceResult => {
   const tokenAddress = CURRENCIES[activeChainId]?.[CURRENCY_IDS.BEAM].ethTokenContract as `0x${string}`;
+  const tokenSpenderAddress = CURRENCIES[activeChainId]?.[CURRENCY_IDS.BEAM].ethPipeContract as `0x${string}`;
 
   const { data: ethBalance, isError } = useBalance({
     query: {
@@ -58,7 +59,7 @@ export const useTokenBalanceAndAllowance = ({
     address: tokenAddress,
     abi: erc20Abi,
     functionName: 'allowance',
-    args: [address, address],
+    args: [address, tokenSpenderAddress],
   });
 
   const isLoading = isBalanceLoading || isAllowanceLoading;

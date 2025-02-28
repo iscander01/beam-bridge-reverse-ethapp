@@ -73,7 +73,7 @@ const TokenCard: React.FC<TokenCardProps> = ({
       address: token.ethTokenContract as `0x${string}`,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [address as `0x${string}`, BigInt(0)],
+      args: [token?.ethPipeContract as `0x${string}`, BigInt(0)],
     });
   };
 
@@ -84,7 +84,7 @@ const TokenCard: React.FC<TokenCardProps> = ({
       address: token.ethTokenContract as `0x${string}`,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [address as `0x${string}`, maxUint256],
+      args: [token?.ethPipeContract as `0x${string}`, maxUint256],
     });
   };
 

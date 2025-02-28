@@ -90,6 +90,6 @@
     "typesafe-actions": "^5.1.0",
     "util": "^0.12.4",
     "viem": "2.x",
-    "wagmi": "^2.14.6"
+    "wagmi": "^2.14.12"
   }
 }
