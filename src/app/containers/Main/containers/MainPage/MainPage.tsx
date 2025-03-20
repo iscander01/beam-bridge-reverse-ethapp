@@ -110,7 +110,7 @@ const MainPage: React.FC = () => {
     if (bridgeTransactions.length > 0) {
       const data = bridgeTransactions.map((tr) => {
         const item = { ...tr };
-        item['isIncome'] = address === tr.to;
+        item['isIncome'] = address?.toLowerCase() === tr.to.toLowerCase();
         return item;
       });
       setTableData(data);

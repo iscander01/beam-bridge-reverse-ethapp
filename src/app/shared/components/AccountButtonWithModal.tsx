@@ -14,13 +14,19 @@ import {
   Text,
   useDisclosure,
   VStack,
-  Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import { useAccount, useDisconnect, useSwitchChain } from 'wagmi';
-import { IconBeam, IconCopyWhite, IconEth, IconLogout } from '../icons';
 import { toast } from 'react-toastify';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+
+import { IconBeam, IconCopyWhite, IconEth, IconLogout } from '../icons';
 import { useAddress, useTokenBalanceAndAllowance } from '../hooks';
 import TokenCard from './TokenCard';
+import { NETWORKS_BY_ID } from '../constants';
 
 const AccountButtonWithModal: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,16 +89,38 @@ const AccountButtonWithModal: React.FC = () => {
                 NETWORK
               </Text>
 
-              <Select value={selectedNetwork} onChange={(e) => {
-                setSelectedNetwork(parseInt(e.target.value));
-                switchChain?.({ chainId: parseInt(e.target.value) });
-              }}>
-                {chains.map((chain) => (
-                  <option value={chain.id} key={chain.id}>
-                    {chain.name}
-                  </option>
-                ))}
-              </Select>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                  bg="transparent"
+                  border={"1px solid #fff"}
+                  color={"#fff"}
+                  _hover={{
+                    bg: "transparent"
+                  }}
+                  _active={{
+                    bg: "transparent"
+                  }}
+                >
+                  {NETWORKS_BY_ID[selectedNetwork].name}
+                </MenuButton>
+                <MenuList bg="rgba(13, 77, 118)" border="1px solid #fff" borderRadius="md">
+                  {chains.map((chain) => (
+                    <MenuItem
+                      _hover={{ bg: "teal.100" }}
+                      bg={"transparent"}
+                      key={chain.id}
+                      onClick={(e) => {
+                        setSelectedNetwork(chain.id);
+                        switchChain?.({ chainId: chain.id });
+                      }}
+                    >
+                      {chain.name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
               <Text fontSize={"14px"} fontWeight={"bold"} letterSpacing={"2.6px"}>
                 SUPPORTED TOKENS

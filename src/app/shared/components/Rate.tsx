@@ -24,7 +24,7 @@ const Rate: React.FC<Props> = ({
   const rate = useSelector(selectRates());
   const sign = income ? getSign(income) : '';
   const amount = groths ? fromGroths(value) : value;
-  return (
+  return selectedCurrencyId && (
     <Ratetyled className={className}>
       {sign}
       {toUSD(amount, rate ? rate[selectedCurrencyId].usd : 0)}

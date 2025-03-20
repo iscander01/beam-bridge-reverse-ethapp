@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { styled } from '@linaria/react';
 import { Button, Input, Window, Rate } from '@app/shared/components';
 import { css } from '@linaria/core';
-import { call, estimateGas, getBytecode, readContract } from '@wagmi/core';
+import { estimateGas } from '@wagmi/core';
 import { config } from "@core/wagmiConfig";
-import EthERC20Pipe from '@app/eth-pipe/EthERC20Pipe.json';
+import EthERC20Pipe from '@app/shared/constants/eth-pipe/EthERC20Pipe.json';
 import { 
   IconBack,
   IconSend,
@@ -24,7 +24,7 @@ import { CURRENCIES, ETH_RATE_ID } from '@app/shared/constants';
 import { useFormik } from 'formik';
 import { Box, Divider, HStack, Text, VStack } from '@chakra-ui/react';
 import { useTokenBalanceAndAllowance } from '@app/shared/hooks';
-import { useAccount, useReadContract, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useAccount, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { Currency } from '@app/shared/interface/Common';
 import { parseNetwork, parseAddress, amountToBigInt } from "@core/appUtils";
 import { encodeFunctionData, erc20Abi, maxUint256 } from 'viem';

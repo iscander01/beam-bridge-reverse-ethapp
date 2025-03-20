@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, delay, put, takeLatest } from 'redux-saga/effects';
 import store from '@app/index';
 
 import { actions } from '.';
@@ -21,13 +21,15 @@ async function loadRatesCached(): Promise<RatesApiResponse> {
   return {};
 }
 
-export function* loadRatesSaga() {
-  try {
-    const ratesApiResponse = (yield call(loadRatesCached)) as RatesApiResponse;
-    yield put(actions.loadRates.success(ratesApiResponse));
-    setTimeout(() => store.dispatch(actions.loadRates.request()), FETCH_INTERVAL);
-  } catch (e) {
-    yield put(actions.loadRates.failure(e));
+export function* loadRatesSaga(): Generator {
+  while (true) {
+    try {
+      const ratesApiResponse: RatesApiResponse = (yield call(loadRatesCached)) as RatesApiResponse;
+      yield put(actions.loadRates.success(ratesApiResponse));
+    } catch (error) {
+      yield put(actions.loadRates.failure(error));
+    }
+    yield delay(FETCH_INTERVAL);
   }
 }
 

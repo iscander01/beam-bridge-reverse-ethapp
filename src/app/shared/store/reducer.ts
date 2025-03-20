@@ -1,23 +1,27 @@
-import produce from 'immer';
-import { ActionType, createReducer } from 'typesafe-actions';
+import produce from "immer";
+import { ActionType, createReducer } from "typesafe-actions";
 
-import { SharedStateType } from '../interface';
-import * as actions from './actions';
+import { SharedStateType } from "../interface";
+import * as actions from "./actions";
 
 type Action = ActionType<typeof actions>;
 
 const initialState: SharedStateType = {
-  routerLink: '',
+  routerLink: "",
   errorMessage: null,
   transactions: [],
 };
 
 const reducer = createReducer<SharedStateType, Action>(initialState)
-  .handleAction(actions.navigate, (state, action) => produce(state, (nexState) => {
-    nexState.routerLink = action.payload;
-  }))
-  .handleAction(actions.loadTransactions.success, (state, action) => produce(state, (nexState) => {
-    nexState.transactions = action.payload;
-  }));
+  .handleAction(actions.navigate, (state, action) =>
+    produce(state, (nexState) => {
+      nexState.routerLink = action.payload;
+    }),
+  )
+  .handleAction(actions.loadTransactions.success, (state, action) =>
+    produce(state, (nexState) => {
+      nexState.transactions = action.payload;
+    }),
+  );
 
 export { reducer as SharedReducer };
