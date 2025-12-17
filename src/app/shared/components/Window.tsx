@@ -1,7 +1,6 @@
 import React, { ReactNode, useRef } from 'react';
 import { useAccount } from 'wagmi';
-import { useDispatch } from 'react-redux';
-import { AccountButtonWithModal } from '@app/shared/components';
+import { AccountButton } from '@app/shared/components';
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 
 interface WindowProps {
@@ -32,7 +31,7 @@ const Window: React.FC<WindowProps> = ({
       { state !== "content" && (
         <VStack width={"100%"} justifyContent={"end"} padding={"50px 80px"}>
           <Box ml={"auto"}>
-            <AccountButtonWithModal />
+            <AccountButton />
           </Box>
 
           <Text textAlign={"center"} fontSize={"46px"} fontWeight={"900"} margin={"20px 0 10px"}>

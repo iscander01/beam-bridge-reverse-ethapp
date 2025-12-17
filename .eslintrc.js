@@ -5,6 +5,9 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "plugin:prettier/recommended",
@@ -17,18 +20,18 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 11,
+    ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react-hooks", "unused-imports"],
+  plugins: ["react", "react-hooks", "unused-imports"],
+  ignorePatterns: ["html/", "node_modules/", "dist/", "build/", "coverage/"],
   rules: {
     "no-console": ["error", { allow: ["info", "error"] }],
+    "prettier/prettier": "warn",
     "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/prop-types": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
     "react/display-name": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
@@ -39,7 +42,7 @@ module.exports = {
     "import/default": 2,
     "import/export": 2,
     "import/order": [
-      "error",
+      "warn",
       {
         groups: [
           "builtin", // Built-in types are first
@@ -53,6 +56,15 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ["**/*.ts", "**/*.tsx"],
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+        tsconfigRootDir: __dirname,
+      },
+    },
+  ],
   settings: {
     react: {
       version: "latest",

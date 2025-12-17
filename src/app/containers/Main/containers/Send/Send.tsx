@@ -8,11 +8,6 @@ import EthERC20Pipe from '@app/shared/constants/eth-pipe/EthERC20Pipe.json';
 import { 
   IconBack,
   IconSend,
-  IconDaiLarge,
-  IconEthLarge,
-  IconUsdtLarge,
-  IconWbtcLarge,
-  IconBeam,
   IconCheck,
   IconSendPink
 } from '@app/shared/icons';
@@ -84,7 +79,7 @@ const FormSubtitle = styled.p`
 const InfoContainer = styled.div`
   margin-top: 20px;
   width: 600px;
-  padding: 50px
+  padding: 50px;
   border-radius: 10px;
   background-color: rgba(13, 77, 118, .95);
 
@@ -163,8 +158,8 @@ const DEFAULT_RELAYER_FEE = 0.02;
 
 const Send = () => {
   const navigate = useNavigate();
-  const addressInputRef = useRef<HTMLInputElement>();
-  const amountInputRef = useRef<HTMLInputElement>();
+  const addressInputRef = useRef<HTMLInputElement>(null);
+  const amountInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
   const rates = useSelector(selectRates());
   const gasPrices = useSelector(selectGasPrices());
@@ -278,7 +273,8 @@ const Send = () => {
     }
 
     const regex = new RegExp('^[A-Za-z0-9]+$');
-    if (!regex.test(address || addressFromParams) || !parsedCurrency) {
+    const addressToTest = address || addressFromParams || '';
+    if (!regex.test(addressToTest) || !parsedCurrency) {
       errorsValidation.address = `Unrecognized address`;
     }
     

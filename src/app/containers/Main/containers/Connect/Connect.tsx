@@ -1,5 +1,5 @@
 import React from "react";
-import { Window, ConnectButtonWithModal } from "@app/shared/components";
+import { Window, ConnectButton } from "@app/shared/components";
 import { Text, VStack } from "@chakra-ui/react";
 
 const Connect: React.FC = () => {
@@ -13,7 +13,7 @@ const Connect: React.FC = () => {
           Transfer ETH and BEAM.<br/>
           More tokens coming soon!
         </Text>
-        <ConnectButtonWithModal></ConnectButtonWithModal>
+        <ConnectButton />
       </VStack>
     </Window>
   );

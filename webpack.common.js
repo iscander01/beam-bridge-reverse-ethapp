@@ -29,6 +29,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     plugins: [new TsconfigPathsPlugin()],
+    fallback: {
+      '@react-native-async-storage/async-storage': false,
+    },
   },
   module: {
     rules: [
@@ -36,6 +39,22 @@ module.exports = {
         test: /\.tsx?$/,
         use: ['babel-loader', '@linaria/webpack-loader'],
         exclude: /node_modules/,
+      },
+      {
+        test: /\.js$/,
+        include: /node_modules\/@base-org/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', { modules: false }],
+            ],
+            plugins: [
+              '@babel/plugin-syntax-import-attributes',
+              '@babel/plugin-proposal-class-properties',
+            ],
+          },
+        },
       },
       {
         test: /\.svg$/,
