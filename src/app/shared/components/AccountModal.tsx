@@ -49,7 +49,8 @@ const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) => {
 
   const selectedNetworkName = useMemo(() => {
     if (!selectedNetwork) return "Select network";
-    return NETWORKS_BY_ID[selectedNetwork]?.name ?? "Unknown network";
+    const name = NETWORKS_BY_ID[selectedNetwork]?.name ?? "Unknown network";
+    return name === "Arbitrum One" ? "Arbitrum" : name;
   }, [selectedNetwork]);
 
   const handleCopyClick = () => {
@@ -230,9 +231,9 @@ const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) => {
                     scrollbarColor: "rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05)",
                   }}
                 >
-                  {chains.map((chain, index) => {
+                  {chains.filter((chain) => chain.id !== 421614).map((chain, index, filteredChains) => {
                     const isFirst = index === 0;
-                    const isLast = index === chains.length - 1;
+                    const isLast = index === filteredChains.length - 1;
                     const itemRadius =
                       isFirst && isLast
                         ? "12px"
@@ -272,7 +273,7 @@ const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) => {
                       >
                         <HStack justify="space-between" width="100%" spacing={3}>
                           <Text noOfLines={1} flex={1}>
-                            {chain.name}
+                            {chain.id === 42161 ? "Arbitrum" : chain.name}
                           </Text>
                           {chain.id === activeChain?.id && (
                             <Badge

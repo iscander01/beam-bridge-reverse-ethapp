@@ -131,47 +131,79 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Window>
-        <Flex direction="row">
-          <Button //icon={IconSend}
+        <Flex
+          direction="row"
+          justify="center"
+          mt="24px"
+          gap="16px"
+        >
+          <Button
             disabled={isTrInProgress}
-            backgroundColor={"#da68f5"}
-            borderRadius={"22px"}
-            fontWeight={"bold"}
-            padding={"0 30px"}
-            onClick={handleSendClick}>
-              <IconSend />
-              <Text ml={"10px"}>
-                WBEAM ({activeChain?.name}) ={'>'} BEAM
-              </Text>
+            bgGradient="linear(to-r, #da68f5, #f29cfe)"
+            borderRadius="999px"
+            fontWeight="700"
+            px="28px"
+            py="18px"
+            color="white"
+            boxShadow="0 0 5px rgba(218, 104, 245, 0.35)"
+            _hover={{
+              bgGradient: "linear(to-r, #e472ff, #f8b4ff)",
+              transform: "translateY(-1px)",
+              boxShadow: "0 10px 24px rgba(218, 104, 245, 0.45)",
+            }}
+            _active={{
+              transform: "translateY(0)",
+              boxShadow: "0 4px 12px rgba(218, 104, 245, 0.35)",
+            }}
+            onClick={handleSendClick}
+          >
+            <IconSend />
+            <Text ml="10px">
+              WBEAM ({activeChain?.name}) ={">"} BEAM
+            </Text>
           </Button>
           <Button
-            backgroundColor={"#0bccf7"}
-            borderRadius={"22px"}
-            fontWeight={"bold"}
-            padding={"0 30px"}
-            ml={"20px"}
-            onClick={handleReceiveClick}>
-              <IconReceive />
-              <Text ml={"10px"}>
-                BEAM ={'>'} WBEAM ({activeChain?.name})
-              </Text>
+            bgGradient="linear(to-r, #0bccf7, #52e0ff)"
+            borderRadius="999px"
+            fontWeight="700"
+            px="28px"
+            py="18px"
+            color="white"
+            boxShadow="0 0 5px rgba(11, 204, 247, 0.35)"
+            _hover={{
+              bgGradient: "linear(to-r, #1fd6ff, #7be8ff)",
+              transform: "translateY(-1px)",
+              boxShadow: "0 10px 24px rgba(11, 204, 247, 0.45)",
+            }}
+            _active={{
+              transform: "translateY(0)",
+              boxShadow: "0 4px 12px rgba(11, 204, 247, 0.35)",
+            }}
+            onClick={handleReceiveClick}
+          >
+            <IconReceive />
+            <Text ml="10px">
+              BEAM ={">"} WBEAM ({activeChain?.name})
+            </Text>
           </Button>
         </Flex>
         <Box
-          width="600px"
-          mt="50px"
+          width="100%"
+          maxW="640px"
+          mt="40px"
           mx="auto"
-          px="75px"
-          py="45px"
-          borderRadius="10px"
-          backdropFilter="blur(10px)"
-          backgroundColor="rgba(13, 77, 118, 0.4)"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
+          px="40px"
+          py="32px"
+          borderRadius="16px"
+          backdropFilter="blur(16px)"
+          backgroundColor="rgba(6, 35, 58, 0.8)"
+          boxShadow="0 24px 80px rgba(0, 0, 0, 0.65)"
         >
-          <Text fontSize="24px" fontWeight="bold" mb="40px">
-            Balance
+          <Text fontSize="20px" fontWeight="700" mb="8px">
+            Wallet balance
+          </Text>
+          <Text fontSize="13px" color="rgba(255, 255, 255, 0.7)" mb="24px">
+            Overview of your available assets on the connected Ethereum network.
           </Text>
           <TokenCard
             isApproved={true}
@@ -192,8 +224,24 @@ const MainPage: React.FC = () => {
           />
         </Box>
         {tableData.length > 0 ? (
-          <Box mt="30px" overflow="hidden" borderRadius="10px">
-            <Table config={tableConfig} data={tableData} keyBy='transactionIndex' />
+          <Box
+            width="100%"
+            maxW="860px"
+            mt="40px"
+            mx="auto"
+            px="32px"
+            py="24px"
+            borderRadius="16px"
+            backdropFilter="blur(14px)"
+            backgroundColor="rgba(4, 26, 44, 0.9)"
+            boxShadow="0 24px 80px rgba(0, 0, 0, 0.65)"
+          >
+            <Text fontSize="18px" fontWeight="700" mb="16px">
+              Recent activity
+            </Text>
+            <Box overflow="hidden" borderRadius="10px">
+              <Table config={tableConfig} data={tableData} keyBy='transactionIndex' />
+            </Box>
           </Box>
         ) : (
           <></>

@@ -63,7 +63,11 @@ const Window: React.FC<WindowProps> = ({
                 }}
                 rightIcon={<ChevronDownIcon />}
               >
-                {chain?.name ?? "Select network"}
+                {chain
+                  ? chain.id === 42161
+                    ? "Arbitrum"
+                    : chain.name
+                  : "Select network"}
               </MenuButton>
               <MenuList
                 bg="rgba(13, 77, 118, 0.98)"
@@ -96,9 +100,9 @@ const Window: React.FC<WindowProps> = ({
                   scrollbarColor: "rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05)",
                 }}
               >
-                {chains.map((c, index) => {
+                {chains.filter((c) => c.id !== 421614).map((c, index, filteredChains) => {
                   const isFirst = index === 0;
-                  const isLast = index === chains.length - 1;
+                  const isLast = index === filteredChains.length - 1;
                   const itemRadius =
                     isFirst && isLast
                       ? "12px"
@@ -138,7 +142,7 @@ const Window: React.FC<WindowProps> = ({
                       }}
                     >
                       <Text noOfLines={1} flex={1}>
-                        {c.name}
+                        {c.id === 42161 ? "Arbitrum" : c.name}
                       </Text>
                     </MenuItem>
                   );
