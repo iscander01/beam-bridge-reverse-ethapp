@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@linaria/react';
-import { css } from '@linaria/core';
+import React, { useEffect, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,84 +9,87 @@ import { CURRENCIES, CURRENCY_IDS, NETWORK_EXPLORER, ROUTES } from '@app/shared/
 import { selectTransactions } from '@app/shared/store/selectors';
 import { IconDeposit, IconConfirm } from '@app/shared/icons';
 import { formatActiveAddressString } from '@core/appUtils';
-import { Button, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Button } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { useTokenBalanceAndAllowance } from '@app/shared/hooks';
 import { loadTransactions } from '@app/shared/store/actions';
 import { Transaction } from '@app/shared/interface';
 
-const Content = styled.div`
-  width: 600px;
-  margin: 50px auto 0 auto;
-  padding: 45px 75px;
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-  background-color: rgba(13, 77, 118, .4);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+const getDate = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    const yearString = date.toLocaleDateString(undefined, { year: 'numeric' });
+    const monthString = date.toLocaleDateString(undefined, { month: 'numeric' });
+    const dayString = date.toLocaleDateString(undefined, { day: 'numeric' });
+    const time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    return `${dayString}.${monthString.length == 1 ? '0' + monthString.slice(-2) : monthString}.${yearString} ${time}`;
+};
 
-const ContentHeader = styled.p`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 40px;
-`;
-
-const StyledControls = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledTable = styled.div`
-  margin-top: 30px;
-  overflow: hidden;
-  border-radius: 10px;
-`;
-
-const ReceiveButtonClass = css`
-  margin-left: 20px !important;
-`;
-
-const EmptyTableContent = styled.div`
-  text-align: center;
-  margin-top: 72px;
-  font-size: 14px;
-  font-style: italic;
-  color: #8da1ad;
-`;
-
-const Completed = styled.div`
-  display: flex;
-
-  > .icon-deposit {
-    margin-left: 2px;
-    margin-right: 12px;
-  }
-
-  > .icon-receive {
-    margin-right: 10px;
-  }
-
-  > .text-receive {
-    color: #0BCCF7;
-  }
-
-  > .text-deposit {
-    color: #DA68F5;
-  }
-`;
-
-const HashLink = styled.a`
-  text-decoration: none;
-  color: #00f6d2;
-`;
+const createTableConfig = (activeChain: ReturnType<typeof useAccount>['chain']) => {
+  return [
+    {
+      name: 'value',
+      title: 'Amount',
+      fn: (_value: string, tr: Transaction & { isIncome?: boolean }) => {
+        if (!activeChain) return null;
+        const currency = CURRENCIES[activeChain.id][CURRENCY_IDS.BEAM];
+        const raw = Number(tr.value);
+        if (Number.isNaN(raw)) return null;
+        const amount = ((raw / Math.pow(10, currency.decimals)).toFixed(currency.validator_dec)).replace(/\.?0+$/,'');
+        return `${amount} ${currency.name}`;
+      }
+    },
+    {
+      name: 'timeStamp',
+      title: 'Date',
+      fn: (_value: string, tr: Transaction) => getDate(Number(tr.timeStamp)),
+    },
+    {
+      name: 'isIncome',
+      title: 'Status',
+      fn: (_value: string, tr: Transaction & { isIncome?: boolean }) => (
+        <Flex align="center">
+          {tr.isIncome ? (
+            <IconConfirm className="icon-receive" style={{ marginRight: 10 }} />
+          ) : (
+            <IconDeposit className="icon-deposit" style={{ marginLeft: 2, marginRight: 12 }} />
+          )}
+          <Text
+            as="span"
+            fontSize="14px"
+            fontWeight="500"
+            color={tr.isIncome ? '#0BCCF7' : '#DA68F5'}
+          >
+            completed
+          </Text>
+        </Flex>
+      ),
+    },
+    {
+      name: 'hash',
+      title: 'Hash',
+      fn: (_value: string, tr: Transaction) => {
+        if (!activeChain) return null;
+        return (
+          <Text
+            as="a"
+            href={NETWORK_EXPLORER[activeChain.id] + tr.hash}
+            target="_blank"
+            rel="noreferrer"
+            textDecoration="none"
+            color="#00f6d2"
+          >
+            {formatActiveAddressString(tr.hash)}
+          </Text>
+        );
+      },
+    },
+  ];
+};
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
   const bridgeTransactions = useSelector(selectTransactions());
   const isTrInProgress = useSelector(selectIsTrInProgress());
-  const [tableData, setTableData] = useState<Transaction[]>([]);
   const dispatch = useDispatch();
   const { address, chain: activeChain } = useAccount();
 
@@ -101,80 +102,23 @@ const MainPage: React.FC = () => {
     if (address && activeChain) {
       dispatch(loadTransactions.request({
         address,
-        chain: activeChain.id
+        chain: activeChain.id,
       }));
     }
-  }, [address, activeChain]);
+  }, [address, activeChain, dispatch]);
 
-  useEffect(() => {
-    if (bridgeTransactions.length > 0) {
-      const data = bridgeTransactions.map((tr) => {
-        const item = { ...tr };
-        item['isIncome'] = address?.toLowerCase() === tr.to.toLowerCase();
-        return item;
-      });
-      setTableData(data);
-    }
-  }, [bridgeTransactions]);
+  const tableData = useMemo<Transaction[]>(() => {
+    if (!bridgeTransactions.length) return [];
+    return bridgeTransactions.map((tr) => ({
+      ...tr,
+      isIncome: address ? address.toLowerCase() === tr.to.toLowerCase() : false,
+    }));
+  }, [bridgeTransactions, address]);
 
-  const getDate = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    const yearString = date.toLocaleDateString(undefined, { year: 'numeric' });
-    const monthString = date.toLocaleDateString(undefined, { month: 'numeric' });
-    const dayString = date.toLocaleDateString(undefined, { day: 'numeric' });
-    const time = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    return `${dayString}.${monthString.length == 1 ? '0' + monthString.slice(-2) : monthString}.${yearString} ${time}`;
-  };
-
-  const TABLE_CONFIG = [
-    {
-      name: 'value',
-      title: 'Amount',
-      fn: (value: string, tr: any) => {
-        if (activeChain) {
-          const currency = CURRENCIES[activeChain.id][CURRENCY_IDS.BEAM];
-          const amount = ((parseInt(tr.value) / Math.pow(10, currency.decimals)).toFixed(currency.validator_dec)).replace(/\.?0+$/,"");
-          return `${amount} ${currency.name}`;
-        }
-      }
-    },
-    {
-      name: 'timeStamp',
-      title: 'Date',
-      fn: (value: string, tr: any) => {
-        const date = getDate(tr.timeStamp);
-        return date;
-
-      }
-    },
-    {
-      name: 'isIncome',
-      title: 'Status',
-      fn: (value: string, tr: any) => {
-        return (<Completed>
-          { 
-            tr.isIncome ? 
-            <IconConfirm className='icon-receive'/> : 
-            <IconDeposit className='icon-deposit'/> 
-          } 
-          { 
-            <span className={ tr.isIncome ? 'text-receive' : 'text-deposit' }>
-              completed
-            </span>
-          }
-        </Completed>);
-      }
-    },
-    {
-      name: 'hash',
-      title: 'Hash',
-      fn: (value: string, tr: any) => {
-        return (activeChain && <HashLink href={NETWORK_EXPLORER[activeChain.id] + tr.hash} target='_blank'>
-          {formatActiveAddressString(tr.hash)
-        }</HashLink>)
-      }
-    }
-  ];
+  const tableConfig = useMemo(
+    () => createTableConfig(activeChain),
+    [activeChain],
+  );
 
   const handleSendClick: React.MouseEventHandler = () => {
     navigate(ROUTES.MAIN.SEND);
@@ -187,7 +131,7 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Window>
-        <StyledControls>
+        <Flex direction="row">
           <Button //icon={IconSend}
             disabled={isTrInProgress}
             backgroundColor={"#da68f5"}
@@ -201,20 +145,34 @@ const MainPage: React.FC = () => {
               </Text>
           </Button>
           <Button
-            className={ReceiveButtonClass}
             backgroundColor={"#0bccf7"}
             borderRadius={"22px"}
             fontWeight={"bold"}
             padding={"0 30px"}
+            ml={"20px"}
             onClick={handleReceiveClick}>
               <IconReceive />
               <Text ml={"10px"}>
                 BEAM ={'>'} WBEAM ({activeChain?.name})
               </Text>
           </Button>
-        </StyledControls>
-        <Content>
-          <ContentHeader>Balance</ContentHeader>
+        </Flex>
+        <Box
+          width="600px"
+          mt="50px"
+          mx="auto"
+          px="75px"
+          py="45px"
+          borderRadius="10px"
+          backdropFilter="blur(10px)"
+          backgroundColor="rgba(13, 77, 118, 0.4)"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Text fontSize="24px" fontWeight="bold" mb="40px">
+            Balance
+          </Text>
           <TokenCard
             isApproved={true}
             isToken={false}
@@ -232,11 +190,14 @@ const MainPage: React.FC = () => {
             balance={tokenBalance?.value}
             decimals={tokenBalance?.decimals}
           />
-        </Content>
-        <StyledTable>
-          <Table config={TABLE_CONFIG} data={tableData} keyBy='transactionIndex'/>
-          {tableData.length === 0 && <EmptyTableContent>There are no transactions yet</EmptyTableContent>}
-        </StyledTable>
+        </Box>
+        {tableData.length > 0 ? (
+          <Box mt="30px" overflow="hidden" borderRadius="10px">
+            <Table config={tableConfig} data={tableData} keyBy='transactionIndex' />
+          </Box>
+        ) : (
+          <></>
+        )}
       </Window>
     </>
   );
