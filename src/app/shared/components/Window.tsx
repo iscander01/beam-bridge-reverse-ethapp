@@ -21,6 +21,33 @@ interface WindowProps {
   children?: ReactNode;
 }
 
+const ArrowRightIcon: React.FC = () => (
+  <Box
+    as="span"
+    display="inline-flex"
+    alignItems="center"
+    justifyContent="center"
+    w="18px"
+    h="18px"
+  >
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 9H14M9 4L14 9L9 14"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </Box>
+);
+
 const Window: React.FC<WindowProps> = ({
   children,
   state
@@ -151,9 +178,19 @@ const Window: React.FC<WindowProps> = ({
             </Menu>
           </HStack>
 
-          <Text textAlign={"center"} fontSize={"46px"} fontWeight={"900"} margin={"20px 0 10px"}>
-            WBEAM ({chain?.name}) ={'>'} BEAM Bridge
-          </Text>
+          <Flex
+            align="center"
+            justify="center"
+            fontSize="46px"
+            fontWeight="900"
+            mt="20px"
+            mb="10px"
+            gap="12px"
+          >
+            <Text as="span">WBEAM ({chain?.name})</Text>
+            <ArrowRightIcon />
+            <Text as="span">BEAM Bridge</Text>
+          </Flex>
         </VStack>       
       )}
       { children }

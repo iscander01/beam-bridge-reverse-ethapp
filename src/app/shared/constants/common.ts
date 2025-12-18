@@ -84,8 +84,8 @@ export const CURRENCIES: CurrenciesByNetworkType = {
       id: 1,
       decimals: 8,
       validator_dec: 8,
-      ethTokenContract: "0x0c1284a6e3D75edBfaCCaD54eAB9a0B5f6d6525D",
-      ethPipeContract: "0xf5eA79F240b92349D7C27a88656FdAcc9a503A8E",
+      ethTokenContract: "0xE5AcBB03D73267c03349c76EaD672Ee4d941F499",
+      ethPipeContract: "0x6063024646E8A1561970840a4b0e0f1082f5a670",
     },
     [CURRENCY_IDS.ETH]: {
       name: "ETH",

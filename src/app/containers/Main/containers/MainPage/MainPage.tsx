@@ -86,6 +86,33 @@ const createTableConfig = (activeChain: ReturnType<typeof useAccount>['chain']) 
   ];
 };
 
+const ArrowRightIcon: React.FC = () => (
+  <Box
+    as="span"
+    display="inline-flex"
+    alignItems="center"
+    justifyContent="center"
+    w="18px"
+    h="18px"
+  >
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 9H14M9 4L14 9L9 14"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </Box>
+);
+
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
   const bridgeTransactions = useSelector(selectTransactions());
@@ -158,9 +185,11 @@ const MainPage: React.FC = () => {
             onClick={handleSendClick}
           >
             <IconSend />
-            <Text ml="10px">
-              WBEAM ({activeChain?.name}) ={">"} BEAM
-            </Text>
+            <Flex ml="10px" align="center" gap="6px">
+              <Text>WBEAM ({activeChain?.name})</Text>
+              <ArrowRightIcon />
+              <Text>BEAM</Text>
+            </Flex>
           </Button>
           <Button
             bgGradient="linear(to-r, #0bccf7, #52e0ff)"
@@ -182,9 +211,11 @@ const MainPage: React.FC = () => {
             onClick={handleReceiveClick}
           >
             <IconReceive />
-            <Text ml="10px">
-              BEAM ={">"} WBEAM ({activeChain?.name})
-            </Text>
+            <Flex ml="10px" align="center" gap="6px">
+              <Text>BEAM</Text>
+              <ArrowRightIcon />
+              <Text>WBEAM ({activeChain?.name})</Text>
+            </Flex>
           </Button>
         </Flex>
         <Box
