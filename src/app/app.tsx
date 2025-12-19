@@ -1,108 +1,44 @@
-import React, { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { wagmiConfig } from './wagmi';
+import { Routes } from './Routes';
 
-import { actions as sharedActions, selectors as sharedSelectors } from "@app/shared/store";
-import { actions as mainActions } from "@app/containers/Main/store";
-import "react-toastify/dist/ReactToastify.css";
-
-import { useNavigate, useRoutes, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { useAccount } from "wagmi";
-
-import "./styles";
-import { ROUTES_PATH } from "@app/shared/constants";
-import {
-  MainPage,
-  Receive,
-  Send,
-  Connect
-} from "@app/containers/Main/containers";
-
-const routes = (isConnected: boolean) => [
-  {
-    path: ROUTES_PATH.MAIN.BASE,
-    element: !isConnected ? <Connect/> : <MainPage />,
-  },
-  {
-    path: ROUTES_PATH.MAIN.SEND_BY_ADDRESS,
-    element: !isConnected ? <Connect/> : <Send />,
-  },
-  {
-    path: ROUTES_PATH.MAIN.RECEIVE,
-    element: !isConnected ? <Connect/> : <Receive />,
-  },
-  {
-    path: ROUTES_PATH.MAIN.SEND,
-    element: !isConnected ? <Connect/> : <Send />,
-  },
-  {
-    path: ROUTES_PATH.MAIN.CONNECT,
-    element: !isConnected ? <Connect /> : <Navigate to={ROUTES_PATH.MAIN.BASE} />,
-  }
-];
-
-// declare global {
-//   interface Window {
-//     ethereum: any;
-//   }
-// }
-
-const App = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const navigateURL = useSelector(sharedSelectors.selectRouterLink());
-
-  const { isConnected } = useAccount();
-  const content = useRoutes(routes(isConnected));
-
-  useEffect(() => {
-    dispatch(mainActions.loadRates.request());
-  }, [isConnected]);
-
-  useEffect(() => {
-    if (navigateURL) {
-      navigate(navigateURL);
-      dispatch(sharedActions.navigate(""));
-    }
-  }, [navigateURL, dispatch, navigate]);
-
-  const theme = extendTheme({
-    styles: {
-      global: {
-        body: {
-          color: "white",
-          backgroundColor: "#0C4379",
-        },
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
     },
-  });
+  },
+});
 
+export function App() {
   return (
-    <ChakraProvider theme={theme}>
-      {content}
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        closeButton={false}
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
-        pauseOnHover={false}
-        toastStyle={{
-          textAlign: "center",
-          background: "#22536C",
-          color: "white",
-          width: "90%",
-          margin: "0 auto 36px",
-          borderRadius: "10px",
-        }}
-      />
-    </ChakraProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+        <ToastContainer
+          position="bottom-right"
+          theme="dark"
+          autoClose={3000}
+          hideProgressBar
+          icon={false}
+          toastStyle={{
+            background: 'rgba(255, 255, 255, 0.12)',
+            border: '1px solid rgba(255, 255, 255, 0.22)',
+            color: 'rgba(255, 255, 255, 0.96)',
+            backdropFilter: 'blur(10px)',
+          }}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
+      </QueryClientProvider>
+    </WagmiProvider>
   );
-};
-
-export default App;
+}

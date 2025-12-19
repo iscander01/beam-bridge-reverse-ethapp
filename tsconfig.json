@@ -1,35 +1,23 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "es2020",
-    "module": "commonjs",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
+
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noEmit": false,
-    "typeRoots": [
-      "node_modules/@types",
-      "node_modules/web-ext-types",
-      "./src/@types"
-    ],
-    "types": ["node"],
-    "baseUrl": "src/",
-    "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@model/*": ["app/model/*"],
-      "@uikit": ["app/uikit"],
-      "@uikit/*": ["app/uikit/*"],
-      "@pages/*": ["app/pages/*"],
-      "@state/*": ["app/state/*"],
-      "@assets/*": ["assets/*"]
-    }
+    "types": ["vite/client"],
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "images.d.ts"],
-  "exclude": ["node_modules", "html"]
+  "include": ["src"]
 }
