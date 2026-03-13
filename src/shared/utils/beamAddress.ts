@@ -29,7 +29,6 @@ export function chainIdFromIndicator(indicator: string): number | null {
   return Number(entry[0]);
 }
 
-export function formatEvmBridgeAddress(evmAddress: `0x${string}`, chainId: number): string {
-  const suffix = NETWORK_INDICATOR[chainId];
-  return suffix ? `${evmAddress}${suffix}` : evmAddress;
+export function formatEvmBridgeAddress(evmAddress: `0x${string}`, _chainId: number): string {
+  return evmAddress;
 }
