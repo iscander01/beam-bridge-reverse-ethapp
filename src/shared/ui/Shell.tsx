@@ -1,10 +1,13 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { WalletPill } from './WalletPill';
 import { NetworkPill } from './NetworkPill';
 import { BeamLogo } from './BeamLogo';
 
-export function Shell() {
-  const loc = useLocation();
+export function Shell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
 
   return (
     <div className="min-h-screen">
@@ -24,23 +27,21 @@ export function Shell() {
         </header>
 
         <nav className="mt-8 flex items-center gap-2">
-          <NavLink to="/" active={loc.pathname === '/'} label="Overview" />
-          <NavLink to="/send" active={loc.pathname.startsWith('/send')} label="Send" />
-          <NavLink to="/receive" active={loc.pathname.startsWith('/receive')} label="Receive" />
+          <NavLink href="/" active={pathname === '/'} label="Overview" />
+          <NavLink href="/send" active={pathname.startsWith('/send')} label="Send" />
+          <NavLink href="/receive" active={pathname.startsWith('/receive')} label="Receive" />
         </nav>
 
-        <main className="mt-8">
-          <Outlet />
-        </main>
+        <main className="mt-8">{children}</main>
       </div>
     </div>
   );
 }
 
-function NavLink({ to, active, label }: { to: string; active: boolean; label: string }) {
+function NavLink({ href, active, label }: { href: string; active: boolean; label: string }) {
   return (
     <Link
-      to={to}
+      href={href}
       className={
         'rounded-pill border px-4 py-2 text-sm font-semibold transition ' +
         (active

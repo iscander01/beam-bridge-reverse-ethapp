@@ -1,19 +1,23 @@
+'use client';
+
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Panel } from '../../../shared/ui/Panel';
 import { PrimaryButton } from '../../../shared/ui/PrimaryButton';
+import { BeamMark } from '../../../shared/ui/BeamMark';
 import { formatEvmBridgeAddress } from '../../../shared/utils/beamAddress';
 
 export function ReceivePage() {
-  const { address, chain, isConnected } = useAccount();
+  const { address, chain, chainId, isConnected } = useAccount();
+  const resolvedChainId = chain?.id ?? chainId;
   const [copied, setCopied] = useState(false);
 
   const bridgeAddress = useMemo(() => {
-    if (!address || !chain?.id) return '';
-    return formatEvmBridgeAddress(address, chain.id);
-  }, [address, chain?.id]);
+    if (!address || !resolvedChainId) return '';
+    return formatEvmBridgeAddress(address, resolvedChainId);
+  }, [address, resolvedChainId]);
 
   return (
     <div className="space-y-6">
@@ -22,13 +26,17 @@ export function ReceivePage() {
           <div>
             <div className="flex items-center gap-2 text-lg font-extrabold">
               <span className="inline-flex items-center gap-2 leading-none">
-                <span>BEAM → WBEAM</span>
-                <NetworkIcon chainId={chain?.id} className="block h-4 w-4 shrink-0 text-white/70" />
+                <span className="inline-flex items-center gap-2">
+                  <span>BEAM</span>
+                  <BeamMark className="h-4 w-4 text-white/70" />
+                  <span>→ WBEAM</span>
+                </span>
+                <NetworkIcon chainId={resolvedChainId} className="block h-4 w-4 shrink-0 text-white/70" />
               </span>
             </div>
             <div className="mt-1 text-sm text-white/60">Copy your EVM bridge address and paste into Beam Wallet.</div>
           </div>
-          <Link to="/">
+          <Link href="/">
             <span className="text-sm font-semibold text-white/60 hover:text-white">Back</span>
           </Link>
         </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 
 export function BeamLogo({ className = 'h-10 w-10' }: { className?: string }) {

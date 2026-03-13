@@ -4,25 +4,31 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "check-solana-balance": "node scripts/check-solana-balance.js",
+    "check-seed-with-enjoy": "node scripts/check-seed-with-enjoy.js",
+    "check-all-seeds-with-enjoy": "node scripts/check-all-seeds-with-enjoy.js"
   },
   "dependencies": {
+    "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.62.0",
+    "bip39": "^3.1.0",
+    "ed25519-hd-key": "^1.3.0",
+    "next": "^16.1.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
     "react-toastify": "^11.0.5",
     "viem": "^2.23.2",
     "wagmi": "^2.14.7"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
@@ -31,7 +37,6 @@
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.3"
+    "typescript": "^5.7.2"
   }
 }

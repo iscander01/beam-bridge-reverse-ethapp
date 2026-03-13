@@ -1,9 +1,10 @@
+'use client';
+
 import { useState } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { toast } from 'react-toastify';
 import { formatActiveAddressString } from '../utils/format';
 import { useAddress } from '../hooks/useAddress';
-import { IconCopyWhite } from '../icons';
 
 export function WalletPill() {
   const { address, isConnected, connector } = useAccount();
@@ -56,7 +57,7 @@ export function WalletPill() {
             className="inline-flex items-center cursor-pointer hover:opacity-70 transition"
             title={copied ? 'Copied!' : 'Copy address'}
           >
-            <img src={IconCopyWhite as string} alt="Copy" className="h-3.5 w-3.5" />
+            <CopyIcon className="h-3.5 w-3.5" />
           </span>
         )}
       </button>
@@ -105,6 +106,18 @@ export function WalletPill() {
         </div>
       )}
     </>
+  );
+}
+
+function CopyIcon({ className = 'h-4 w-4' }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden>
+      <path
+        d="M11.316 0H2.474C1.664 0 1 .655 1 1.455v10.181h1.474V1.455h8.842V0zm2.21 2.91H5.421c-.81 0-1.474.654-1.474 1.454v10.181c0 .8.664 1.455 1.474 1.455h8.105c.81 0 1.474-.655 1.474-1.455V4.364c0-.8-.663-1.455-1.474-1.455zm0 11.635H5.421V4.364h8.105v10.181z"
+        fill="currentColor"
+        fillRule="nonzero"
+      />
+    </svg>
   );
 }
 
