@@ -24,6 +24,38 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="mt-8">{children}</main>
+
+        <footer className="mt-16 border-t border-white/10 pt-8 text-sm text-white/50">
+          <div className="flex items-center justify-between">
+            <div>© 2026 BeamX DAO. All Rights Reserved.</div>
+            <div className="flex items-center gap-4">
+              <a 
+                href="https://beam.mw/downloads" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white/70 transition-colors"
+              >
+                Download Wallet
+              </a>
+              <a 
+                href="https://beam.mw/privacy-policy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white/70 transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="https://t.me/BeamSupport" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white/70 transition-colors"
+              >
+                Support
+              </a>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
