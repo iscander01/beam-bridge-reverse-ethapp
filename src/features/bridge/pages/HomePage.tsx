@@ -11,6 +11,8 @@ import { compactHash, formatNumber, usd } from '../../../shared/utils/format';
 import { useBalancesQuery, useRatesQuery, useTransactionsQuery } from '../hooks/useBridgeQueries';
 import { useMemo, type ReactNode } from 'react';
 
+import { IconSendPink, IconReceive } from '../../../shared/icons';
+
 export function HomePage() {
   const { address, chain, chainId, isConnected } = useAccount();
   const resolvedChainId = chain?.id ?? chainId;
@@ -60,25 +62,17 @@ export function HomePage() {
       <div className="flex flex-wrap items-center gap-3">
         <Link href="/send">
           <PrimaryButton tone="pink">
-            <span className="inline-flex items-center gap-2 leading-none">
-              <span>WBEAM</span>
-              <NetworkIcon chainId={resolvedChainId} className="block h-4 w-4 shrink-0 text-white/70" />
-              <span className="inline-flex items-center gap-2">
-                <span>→ BEAM</span>
-                <BeamMark className="h-4 w-4 text-white/70" />
-              </span>
+            <span className="inline-flex items-center gap-2">
+              <IconSendPink className="h-4 w-4 text-white" />
+              <span>Send</span>
             </span>
           </PrimaryButton>
         </Link>
         <Link href="/receive">
           <PrimaryButton tone="blue">
-            <span className="inline-flex items-center gap-2 leading-none">
-              <span className="inline-flex items-center gap-2">
-                <span>BEAM</span>
-                <BeamMark className="h-4 w-4 text-white/70" />
-                <span>→ WBEAM</span>
-              </span>
-              <NetworkIcon chainId={resolvedChainId} className="block h-4 w-4 shrink-0 text-white/70" />
+            <span className="inline-flex items-center gap-2">
+              <IconReceive className="h-4 w-4 text-white" />
+              <span>Receive</span>
             </span>
           </PrimaryButton>
         </Link>
