@@ -205,7 +205,9 @@ export function SendPage({ beamBridgeAddress }: { beamBridgeAddress?: string }) 
             <div className="mt-1 text-sm text-white/60">Paste a Beam bridge address from Beam Wallet.</div>
           </div>
           <Link href="/">
-            <span className="text-sm font-semibold text-white/60 hover:text-white">Back</span>
+            <span className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10 hover:border-white/30">
+              Back
+            </span>
           </Link>
         </div>
 
@@ -367,7 +369,7 @@ export function SendPage({ beamBridgeAddress }: { beamBridgeAddress?: string }) 
                 }
               }}
             >
-              {submitState === 'approving' ? 'Approving…' : submitState === 'sending' ? 'Sending…' : 'Transfer'}
+              {submitState === 'approving' ? 'Approving…' : submitState === 'sending' ? 'Sending…' : 'Send'}
             </PrimaryButton>
           </div>
 
