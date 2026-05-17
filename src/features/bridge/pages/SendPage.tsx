@@ -24,7 +24,7 @@ const DEFAULT_RELAYER_FEE = 0.02;
 export function SendPage({ beamBridgeAddress }: { beamBridgeAddress?: string }) {
   const { address, chain, chainId, isConnected } = useAccount();
   const queryClient = useQueryClient();
-  const resolvedChainId = chain?.id ?? chainId;
+  const resolvedChainId = chain?.id ?? chainId ?? 1; // Default to Ethereum mainnet
   const { switchChain } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
 

@@ -11,7 +11,7 @@ import { formatEvmBridgeAddress } from '../../../shared/utils/beamAddress';
 
 export function ReceivePage() {
   const { address, chain, chainId, isConnected } = useAccount();
-  const resolvedChainId = chain?.id ?? chainId;
+  const resolvedChainId = chain?.id ?? chainId ?? 1; // Default to Ethereum mainnet
   const [copied, setCopied] = useState(false);
 
   const bridgeAddress = useMemo(() => {
