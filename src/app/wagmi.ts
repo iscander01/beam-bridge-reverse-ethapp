@@ -15,5 +15,6 @@ export const wagmiConfig = createConfig({
     [arbitrum.id]: http(ARBITRUM_RPC_URL),
     [arbitrumSepolia.id]: http(ARBITRUM_SEPOLIA_RPC_URL),
   },
+  ssr: true,
 });
 

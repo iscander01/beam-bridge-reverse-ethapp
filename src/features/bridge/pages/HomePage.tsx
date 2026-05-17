@@ -14,7 +14,7 @@ import { IconSendPink, IconReceive } from '../../../shared/icons';
 
 export function HomePage() {
   const { address, chain, chainId, isConnected } = useAccount();
-  const resolvedChainId = chain?.id ?? chainId;
+  const resolvedChainId = chain?.id ?? chainId ?? 1; // Default to Ethereum mainnet
   const token = resolvedChainId ? TOKENS_BY_CHAIN[resolvedChainId]?.wbeam : undefined;
 
   const assets = useMemo((): BridgeAsset[] => {
