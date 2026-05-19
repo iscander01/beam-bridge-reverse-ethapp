@@ -223,7 +223,7 @@ export function SendPage({ beamBridgeAddress }: { beamBridgeAddress?: string }) 
 
           <label className="block">
             <div className="mb-2 text-xs font-extrabold tracking-[0.22em] text-white/70">AMOUNT</div>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <input
                 className={
                   'flex-1 rounded-xl border bg-black/10 px-4 py-3 text-sm text-white outline-none transition ' +
@@ -422,18 +422,18 @@ function AssetSelector({
 
   if (assets.length <= 1) {
     return (
-      <div className="flex shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm font-semibold text-white/70">
+      <div className="flex w-full shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm font-semibold text-white/70 sm:w-auto">
         {displayName}
       </div>
     );
   }
 
   return (
-    <div className="relative shrink-0" ref={menuRef}>
+    <div className="relative w-full shrink-0 sm:w-auto" ref={menuRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+        className="flex w-full items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10 transition sm:w-auto sm:justify-start"
       >
         <span>{displayName}</span>
         <svg
@@ -455,7 +455,7 @@ function AssetSelector({
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 min-w-[200px] max-h-80 overflow-y-auto rounded-xl border border-white/20 bg-bg-700/98 backdrop-blur shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50"
+          className="absolute left-0 right-0 mt-2 w-[min(92vw,360px)] max-h-80 overflow-y-auto rounded-xl border border-white/20 bg-bg-700/98 backdrop-blur shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50 sm:left-auto sm:right-0 sm:min-w-[200px] sm:w-auto"
           style={{
             scrollbarWidth: 'thin',
             scrollbarColor: 'rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05)',

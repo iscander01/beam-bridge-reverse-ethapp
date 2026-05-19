@@ -50,8 +50,9 @@ export function HomePage() {
 
   if (!isConnected) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-6 py-20">
         <div className="text-lg text-white/60">Connect wallet first.</div>
+        <div className="h-8" />
       </div>
     );
   }
@@ -149,10 +150,17 @@ export function HomePage() {
           </div>
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
-          <table className="w-full text-left text-sm">
+        <MobileTxList
+          txs={sortedTxs}
+          explorerBase={resolvedChainId ? NETWORK_EXPLORER_TX[resolvedChainId] : undefined}
+          decimals={token?.decimals ?? 8}
+          address={address}
+        />
+
+        <div className="mt-4 hidden overflow-x-auto rounded-xl border border-white/10 sm:block">
+          <table className="min-w-[560px] w-full text-left text-sm">
             <thead className="bg-white/5 text-xs text-white/60">
-              <tr>
+              <tr className="whitespace-nowrap">
                 <th className="px-4 py-3">Amount</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Date</th>
@@ -173,7 +181,7 @@ export function HomePage() {
                 })();
                 const isIncome = address && t.to ? t.to.toLowerCase() === address.toLowerCase() : false;
                 return (
-                  <tr key={t.transactionIndex} className="hover:bg-white/5">
+                  <tr key={t.hash ?? String(t.transactionIndex)} className="hover:bg-white/5 whitespace-nowrap">
                     <td className="px-4 py-3 text-white/90">{amount} WBEAM</td>
                     <td className="px-4 py-3">
                       <span className={isIncome ? 'font-semibold text-beam-blue' : 'font-semibold text-beam-pink'}>
@@ -232,13 +240,69 @@ function BalanceCard({
 
   return (
     <div className="rounded-xl border border-white/10 bg-black/10 p-4">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {iconNode}
         <div className="text-xl font-extrabold">{value ? formatNumber(Number(value), 8) : '—'}</div>
         <div className="text-sm font-extrabold tracking-[0.22em] text-white/60">{title}</div>
       </div>
       {usdValue && <div className="mt-1 text-xs text-white/50">{usdValue}</div>}
       {sub && <div className="mt-1 text-xs text-white/50">{sub}</div>}
+    </div>
+  );
+}
+
+function MobileTxList({
+  txs,
+  explorerBase,
+  decimals,
+  address,
+}: {
+  txs: Array<{ hash: string; value: string; timeStamp?: string; to?: string }>;
+  explorerBase?: string;
+  decimals: number;
+  address?: string;
+}) {
+  return (
+    <div className="space-y-3 sm:hidden">
+      {txs.slice(0, 8).map((t) => {
+        const dt = new Date(Number(t.timeStamp ?? 0) * 1000);
+        const amount = (() => {
+          try {
+            return formatUnits(BigInt(t.value), decimals);
+          } catch {
+            return t.value;
+          }
+        })();
+        const isIncome = address && t.to ? t.to.toLowerCase() === address.toLowerCase() : false;
+        const hashNode = explorerBase ? (
+          <a
+            className="font-semibold text-beam-mint hover:underline break-all"
+            href={`${explorerBase}${t.hash}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {compactHash(t.hash)}
+          </a>
+        ) : (
+          <span className="text-white/60 break-all">{compactHash(t.hash)}</span>
+        );
+
+        return (
+          <div key={t.hash} className="rounded-xl border border-white/10 bg-black/10 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-sm font-semibold text-white/90">{amount} WBEAM</div>
+              <span className={isIncome ? 'text-sm font-semibold text-beam-blue' : 'text-sm font-semibold text-beam-pink'}>
+                completed
+              </span>
+            </div>
+            <div className="mt-2 text-xs text-white/60">{dt.toLocaleString()}</div>
+            <div className="mt-2 text-sm">{hashNode}</div>
+          </div>
+        );
+      })}
+      {(txs.length ?? 0) === 0 ? (
+        <div className="rounded-xl border border-white/10 bg-black/10 p-4 text-sm text-white/50">No transactions yet.</div>
+      ) : null}
     </div>
   );
 }

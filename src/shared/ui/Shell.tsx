@@ -7,8 +7,8 @@ import { BeamLogo } from './BeamLogo';
 
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <div className="min-h-screen flex flex-col">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
         <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link href="/" className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
             <BeamLogo />
@@ -23,12 +23,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main className="mt-8">{children}</main>
+        <main className="mt-8 flex-1">{children}</main>
 
-        <footer className="mt-16 border-t border-white/10 pt-8 text-sm text-white/50">
-          <div className="flex items-center justify-between">
+        <footer className="mt-auto border-t border-white/10 pt-8 text-sm text-white/50">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>© 2026 BeamX DAO. All Rights Reserved.</div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <a 
                 href="https://beam.mw/downloads" 
                 target="_blank" 
