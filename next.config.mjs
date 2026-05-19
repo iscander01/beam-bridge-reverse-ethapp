@@ -1,7 +1,11 @@
+import { fileURLToPath } from 'node:url';
+
 /** @type {import('next').NextConfig} */
+const appRoot = fileURLToPath(new URL('.', import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   turbopack: {
+    root: appRoot,
     rules: {
       '*.svg': {
         loaders: ['@svgr/webpack'],
